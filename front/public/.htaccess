@@ -1,0 +1,114 @@
+# ---------------------------------------------------------------------------
+# Apache : configuration du site compile (dossier dist/).
+# Ce fichier est copie tel quel par Vite dans dist/ au moment du build.
+# ---------------------------------------------------------------------------
+
+# 1. Routage cote client
+# Une application a page unique n'a qu'un seul fichier HTML. Sans cette regle,
+# ouvrir /mentions-legales directement renverrait une erreur 404 d'Apache.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Les fichiers et dossiers qui existent vraiment sont servis normalement.
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # L'API n'est jamais reecrite vers index.html.
+  RewriteRule ^api/ - [L]
+
+  # Une adresse, une seule forme. /mentions-legales/ et /mentions-legales
+  # afficheraient la meme page : deux URL pour un contenu identique, ce qu'un
+  # moteur de recherche compte comme du contenu duplique. La barre finale est
+  # donc retiree par une redirection permanente, pas seulement toleree.
+  RewriteCond %{REQUEST_FILENAME} !-d
+  RewriteRule ^(.+)/$ /$1 [R=301,L]
+
+  # Seules les adresses reellement declarees dans le routeur sont servies par
+  # index.html avec un code 200. La liste doit rester alignee sur
+  # `front/src/routes/AppRoutes.tsx` : une route ajoutee la-bas et oubliee ici
+  # repondrait 404 alors qu'elle existe.
+  RewriteRule ^(mentions-legales|politique-de-confidentialite)/?$ /index.html [L]
+</IfModule>
+
+# Toute autre adresse n'existe pas. Apache passe alors la main a ErrorDocument,
+# qui renvoie la meme application, donc la page 404 du routeur, mais avec un
+# vrai code HTTP 404.
+#
+# Sans cette ligne, la regle de reecriture ci-dessus renverrait index.html avec
+# un code 200 pour n'importe quelle adresse : la page d'erreur s'afficherait
+# correctement, mais les moteurs de recherche verraient une page valide de plus
+# a chaque lien casse, et les outils de supervision ne signaleraient jamais rien.
+# C'est ce qu'on appelle une « soft 404 », et Google la penalise.
+ErrorDocument 404 /index.html
+
+# A activer le jour de la mise en ligne, pas avant : ces deux regles casseraient
+# un essai local en http sur XAMPP. Elles sont laissees ici pour que le choix
+# soit fait, et non oublie.
+#
+# 1. Forcer HTTPS. Derriere un repartiteur de charge ou un CDN, la variable
+#    %{HTTPS} peut toujours valoir « off » : verifier avant d'activer, sinon la
+#    redirection boucle.
+# <IfModule mod_rewrite.c>
+#   RewriteCond %{HTTPS} off
+#   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+# </IfModule>
+#
+# 2. Choisir une seule forme du domaine, avec ou sans www, et rediriger l'autre.
+#    Sans ce choix, le site existe a deux adresses et sa popularite se partage
+#    entre elles. Remplacer le domaine par le vrai.
+# <IfModule mod_rewrite.c>
+#   RewriteCond %{HTTP_HOST} ^gloire-mayombo\.com$ [NC]
+#   RewriteRule ^ https://www.gloire-mayombo.com%{REQUEST_URI} [R=301,L]
+# </IfModule>
+
+# 2. Compression
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml
+  AddOutputFilterByType DEFLATE application/javascript application/json
+  AddOutputFilterByType DEFLATE image/svg+xml
+</IfModule>
+
+<IfModule mod_brotli.c>
+  AddOutputFilterByType BROTLI_COMPRESS text/html text/css text/plain text/xml
+  AddOutputFilterByType BROTLI_COMPRESS application/javascript application/json
+  AddOutputFilterByType BROTLI_COMPRESS image/svg+xml
+</IfModule>
+
+# 3. Cache
+# Les fichiers produits par Vite portent une empreinte dans leur nom : leur
+# contenu ne change jamais, ils peuvent etre gardes un an. index.html, lui, doit
+# etre reverifie a chaque visite, sinon une mise a jour ne sort jamais.
+<IfModule mod_expires.c>
+  ExpiresActive On
+  ExpiresByType text/css "access plus 1 year"
+  ExpiresByType application/javascript "access plus 1 year"
+  ExpiresByType image/webp "access plus 1 year"
+  ExpiresByType image/jpeg "access plus 1 year"
+  ExpiresByType image/png "access plus 1 year"
+  ExpiresByType image/svg+xml "access plus 1 year"
+  ExpiresByType font/woff2 "access plus 1 year"
+  ExpiresByType text/html "access plus 0 seconds"
+</IfModule>
+
+<IfModule mod_headers.c>
+  <FilesMatch "\.(css|js|webp|jpg|png|svg|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.html$">
+    Header set Cache-Control "no-cache, must-revalidate"
+  </FilesMatch>
+
+  # 4. En-tetes de securite
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set X-Frame-Options "SAMEORIGIN"
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+</IfModule>
+
+# 5. Types MIME manquants sur certaines installations
+<IfModule mod_mime.c>
+  AddType image/webp .webp
+  AddType application/manifest+json .webmanifest
+</IfModule>

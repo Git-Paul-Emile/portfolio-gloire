@@ -1,0 +1,19 @@
+{
+  "name": "NGOLO-MAYOMBO Gloire Barthélémie, juriste en droit des affaires",
+  "short_name": "Gloire Mayombo",
+  "description": "Conseil juridique, contrats, création de société et démarches administratives à Moanda, Gabon.",
+  "lang": "fr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#fbf8f2",
+  "theme_color": "#0b1f3a",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

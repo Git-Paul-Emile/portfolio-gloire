@@ -1,0 +1,253 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------------- */
+/* Design system. Un seul endroit ou les couleurs, typographies et rythmes    */
+/* sont definis. Tout le reste du code consomme ces jetons, jamais une valeur */
+/* brute.                                                                     */
+/*                                                                            */
+/* Palette de base imposee :                                                  */
+/*   #0B1F3A marine   #FFFFFF blanc   #E7EBEE brume   #5579EC bleu   #000000  */
+/*                                                                            */
+/* Les nuances numerotees autour de ces cinq couleurs sont des eclaircies et  */
+/* des assombrissements de la meme teinte, necessaires pour les survols, les  */
+/* bordures et les etats desactives.                                          */
+/* ------------------------------------------------------------------------- */
+@theme {
+  --color-navy-950: #06131f;
+  --color-navy-900: #0b1f3a;
+  --color-navy-800: #102a4d;
+  --color-navy-700: #163457;
+
+  /*
+    blue-500 est la couleur demandee. Elle atteint 3,94:1 sur blanc : suffisant
+    pour une forme, une bordure ou un aplat, insuffisant pour du texte courant.
+    blue-600 est la meme teinte assombrie jusqu'a 5,43:1 sur blanc comme sur
+    bleu : c'est elle qui porte les liens, le texte accentue et le fond des
+    boutons. blue-300 est l'eclaircie lisible sur marine, a 4,50:1.
+    Ne pas eclaircir blue-600 ni assombrir blue-300.
+  */
+  --color-blue-700: #2549b8;
+  --color-blue-600: #325de8;
+  --color-blue-500: #5579ec;
+  --color-blue-300: #5d7fed;
+  --color-blue-100: #e3e9fd;
+
+  --color-mist-100: #f3f5f7;
+  --color-mist-200: #e7ebee;
+  /* mist-300 : filets purement decoratifs, separateurs de listes. */
+  --color-mist-300: #d3dae0;
+  /*
+    mist-400 : bordure des champs de formulaire et des controles. Le contour
+    est parfois le seul indice visuel qu'un champ existe, il doit donc
+    atteindre 3:1 avec son fond, comme l'exige le critere WCAG 1.4.11.
+    Ici 3,62:1 sur blanc et 3,02:1 sur brume. Ne pas l'eclaircir.
+  */
+  --color-mist-400: #7688a0;
+
+  --color-ink-900: #000000;
+  --color-ink-700: #2b3440;
+  --color-ink-500: #46525f;
+
+  --font-display: 'Playfair Display', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --radius-card: 0.5rem;
+
+  --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+
+  @keyframes fade-up {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 18px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Compense l'en-tete fixe quand on arrive sur une ancre. */
+    scroll-padding-top: 5.5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink-700);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.012em;
+    text-wrap: balance;
+    color: var(--color-navy-900);
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  /* Accessibilite : anneau de focus visible et homogene sur tout le site. */
+  :focus-visible {
+    outline: 2px solid var(--color-blue-600);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-blue-100);
+    color: var(--color-navy-900);
+  }
+
+  /* Respect du reglage systeme : aucune animation imposee. */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /*
+    Texte justifie des blocs de lecture.
+
+    La cesure automatique est indispensable : sans elle, le francais justifie
+    creuse des blancs entre les mots. Elle s'appuie sur l'attribut lang du
+    document, qui vaut bien « fr ».
+
+    La justification ne s'active qu'a partir de 640 px. En dessous, une ligne
+    fait moins d'une quarantaine de caracteres : justifier y ouvre des rivieres
+    de blanc que la cesure ne rattrape pas.
+  */
+  .text-lu {
+    hyphens: auto;
+  }
+
+  @media (min-width: 40rem) {
+    .text-lu {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+  }
+
+  /*
+    Couche deplacee par useParallax ou useScrollShift. La variable est ecrite
+    par le script et vaut zero tant qu'il ne s'est pas execute : sans
+    JavaScript, ou avec les animations reduites, l'element reste a sa place.
+  */
+  .parallax {
+    transform: translate3d(0, var(--parallax, 0px), 0);
+    will-change: transform;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .parallax {
+      transform: none;
+      will-change: auto;
+    }
+  }
+
+  /*
+    Inclinaison 3D des cartes, pilotee par useTilt.
+
+    Le script n'ecrit que les quatre variables lues ici. Tant qu'il ne s'est
+    pas execute, ou sur un ecran tactile, les valeurs par defaut laissent la
+    carte parfaitement plate : l'effet ne peut donc jamais bloquer la lecture.
+
+    La rotation passe par `transform`, alors que le soulevement au survol
+    (`hover:-translate-y-1`) passe par la propriete `translate`. En Tailwind v4
+    ce sont deux proprietes CSS distinctes : elles se composent au lieu de
+    s'ecraser. Ne jamais remplacer l'une par un equivalent en `transform`,
+    l'autre disparaitrait.
+
+    La perspective est declaree sur la carte elle-meme, et non sur la grille :
+    chaque carte doit avoir son propre point de fuite, sinon celles des bords
+    se deformeraient beaucoup plus que celle du milieu.
+  */
+  .tilt {
+    transform: perspective(60rem) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg));
+    transform-style: preserve-3d;
+  }
+
+  /*
+    Couche avancee vers le spectateur. Sans au moins un element decolle du
+    fond, la carte pivoterait comme une simple image plate. Le deplacement
+    reste faible : au-dela, l'agrandissement optique rend le texte flou.
+  */
+  .tilt-layer {
+    transform: translateZ(1.25rem);
+  }
+
+  /*
+    Reflet suivant le pointeur. Teinte bleue et non blanche : la carte est
+    deja blanche, un reflet blanc y serait invisible.
+  */
+  .tilt-glare {
+    background: radial-gradient(
+      18rem circle at var(--tilt-glare-x, 50%) var(--tilt-glare-y, 50%),
+      rgb(50 93 232 / 0.1),
+      rgb(50 93 232 / 0) 65%
+    );
+    opacity: 0;
+    transition: opacity 0.25s ease-out;
+  }
+
+  .tilt:hover .tilt-glare {
+    opacity: 1;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tilt,
+    .tilt-layer {
+      transform: none;
+    }
+
+    .tilt-glare {
+      display: none;
+    }
+  }
+
+  /* Apparition au defilement, pilotee par IntersectionObserver. */
+  .reveal {
+    opacity: 0;
+    transform: translate3d(0, 18px, 0);
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .reveal-visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

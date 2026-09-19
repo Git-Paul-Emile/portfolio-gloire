@@ -1,0 +1,6 @@
+# Site vitrine : tout est public, sauf les chemins techniques.
+User-agent: *
+Allow: /
+Disallow: /api/
+
+Sitemap: https://www.gloire-mayombo.com/sitemap.xml

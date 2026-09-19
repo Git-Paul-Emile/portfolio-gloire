@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0B1F3A" />
+
+    <!--
+      Repartition volontaire des metadonnees.
+
+      Ici : uniquement ce qui ne change jamais d'une page a l'autre.
+      Dans le composant src/components/Seo.tsx : tout ce qui varie par page,
+      c'est-a-dire le titre, la description, l'URL canonique, les directives
+      d'indexation et les variantes Open Graph correspondantes.
+
+      Ne pas dupliquer ici une balise geree par Seo.tsx. Sous React 19, les
+      balises produites par react-helmet-async sont remontees dans le <head>
+      sans remplacer celles ecrites en dur : on obtiendrait deux balises
+      canoniques differentes sur les pages internes.
+
+      Seule exception assumee : le <title> ci-dessous. Il sert de repli quand
+      JavaScript ne s'execute pas, et porte pour cela l'attribut data-repli.
+
+      src/main.tsx le supprime des le demarrage de l'application, avant que
+      Seo.tsx ne pose celui de la page en cours. Sans cette suppression, le
+      document aurait deux <title>, ce qui est invalide. Ne pas retirer
+      l'attribut : c'est lui qui designe la balise a supprimer.
+    -->
+    <title data-repli>NGOLO-MAYOMBO Gloire Barthélémie, juriste en droit des affaires</title>
+    <meta name="author" content="NGOLO-MAYOMBO Gloire Barthélémie" />
+    <meta name="geo.region" content="GA-2" />
+    <meta name="geo.placename" content="Moanda, Haut-Ogooué" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:site_name" content="NGOLO-MAYOMBO Gloire Barthélémie" />
+    <meta property="og:image" content="https://www.gloire-mayombo.com/images/og-gloire-mayombo-juriste.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Gloire Barthélémie NGOLO-MAYOMBO, juriste en droit des affaires à Moanda."
+    />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://www.gloire-mayombo.com/images/og-gloire-mayombo-juriste.jpg" />
+    <meta
+      name="twitter:image:alt"
+      content="Gloire Barthélémie NGOLO-MAYOMBO, juriste en droit des affaires à Moanda."
+    />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Playfair+Display:wght@600;700&display=swap"
+    />
+    <link rel="preload" as="image" href="/images/statue-justice.webp" fetchpriority="high" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <noscript>
+      <div style="padding: 24px; font-family: system-ui, sans-serif">
+        <h1>NGOLO-MAYOMBO Gloire Barthélémie, juriste en droit des affaires</h1>
+        <p>
+          Juriste en droit des affaires à Moanda, Haut-Ogooué, au Gabon. Légalisation, contrats de
+          bail, création de société, contrats et actes, dossiers d'état civil, déclarations CNSS et
+          CNAMGS.
+        </p>
+        <p>
+          Ce site a besoin de JavaScript pour s'afficher. Vous pouvez me joindre directement au
+          <a href="tel:+24160346522">060 34 65 22</a> ou par courriel à
+          <a href="mailto:mayombogloire29@gmail.com">mayombogloire29@gmail.com</a>.
+        </p>
+      </div>
+    </noscript>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
