@@ -15,7 +15,7 @@ export default function HomePage() {
     <>
       <Seo
         title="Juriste en droit des affaires à Moanda | NGOLO-MAYOMBO Gloire Barthélémie"
-        description="Juriste en droit des affaires à Moanda, Haut-Ogooué. Légalisation, baux, création de société, contrats, état civil, déclarations CNSS et CNAMGS."
+        description="Juriste en droit des affaires à Moanda, Haut-Ogooué. Démarches administratives, transactions immobilières & foncier, création d’entreprise, contrats, fiscalité, achats et abonnements mensuels."
         path="/"
         jsonLd={[buildWebSiteSchema(), buildLegalServiceSchema(), buildPersonSchema()]}
       />
@@ -23,12 +23,6 @@ export default function HomePage() {
         Ordre des sections : on se presente avant de presenter son offre. Le
         visiteur sait a qui il parle, puis ce qui est propose, puis a quel
         prix, puis comment prendre contact.
-
-        Les marges verticales de chaque section dependent de celle qui la
-        precede : deux sections de meme fond, ici Hero et About, additionnent
-        leurs marges sans rupture de couleur pour les decouper. Toucher a cet
-        ordre impose donc de reverifier les marges de `Hero`, `About` et
-        `Pricing`, ou le rythme de la page se creuse par endroits.
       */}
       <Hero />
       <About />

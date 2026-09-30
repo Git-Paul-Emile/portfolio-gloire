@@ -21,7 +21,7 @@ export function buildLegalServiceSchema(): Record<string, unknown> {
     '@id': businessId,
     name: `${site.fullName}, ${site.jobTitle.toLowerCase()}`,
     description:
-      'Conseil, accompagnement et sécurisation juridique pour les particuliers et les entreprises. Légalisation, immobilier, création de société, contrats, état civil, formalités sociales.',
+      'Conseil, accompagnement et sécurisation juridique, administrative et logistique pour particuliers et entreprises à Moanda. Légalisation, transactions immobilières et foncier, création de société, contrats, fiscalité, achats et sourcing, abonnements mensuels.',
     url: site.url,
     image: `${site.url}/images/og-gloire-mayombo-juriste.jpg`,
     slogan: site.tagline,

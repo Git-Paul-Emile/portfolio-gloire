@@ -2,15 +2,16 @@ import {
   Stamp,
   Home,
   Building2,
+  Receipt,
   FileSignature,
-  UserRound,
-  Briefcase,
+  Handshake,
+  Scale,
   Printer,
   type LucideIcon,
 } from 'lucide-react';
 
 export interface ServiceDomain {
-  /** Identifiant stable, utilise pour l'ancre et les cles React. */
+  /** Identifiant stable, utilisé pour l'ancre et les clés React. */
   id: string;
   label: string;
   icon: LucideIcon;
@@ -18,108 +19,120 @@ export interface ServiceDomain {
 }
 
 /**
- * Les sept domaines d'intervention, repris de la brochure interieure dans le
- * meme ordre et avec les memes intitules.
- *
- * Aucune phrase de presentation n'est ajoutee : la brochure n'en contient pas,
- * et une description inventee engagerait la juriste sur un service qu'elle n'a
- * pas decrit. Cette liste alimente l'affichage, le menu deroulant du
- * formulaire de contact et les donnees structurees Schema.org.
+ * Les huit domaines d'intervention, enrichis selon la brochure complète et le document
+ * officiel de présentation des services de NGOLO-MAYOMBO Gloire Barthélémie.
  */
 export const serviceDomains: readonly ServiceDomain[] = [
   {
     id: 'legalisation',
-    label: 'Légalisation et démarches administratives',
+    label: 'Légalisation & démarches administratives',
     icon: Stamp,
     items: [
-      'Légalisation de documents : travail, bail, prestation',
-      'Enregistrement à la DGI des contrats locatifs',
-      'Accompagnement pour les démarches administratives',
-      'Demandes de documents : certificats, attestations',
-      'Dépôt et suivi de dossiers',
+      'Légalisation de documents : travail, bail, prestation de services',
+      'Certification conforme et vérification formelle des actes',
+      'Enregistrement à la DGI et formalités fiscales associées',
+      'Demandes officielles de documents : certificats, attestations',
+      'Constitution, dépôt et suivi rigoureux de dossiers complets',
+      'Rédaction de courriers administratifs clairs et professionnels',
     ],
   },
   {
     id: 'immobilier',
-    label: 'Immobilier et location',
+    label: 'Immobilier, terrains & foncier',
     icon: Home,
     items: [
-      'Rédaction de contrats de bail, habitation et commercial',
-      'Vérification des documents du propriétaire',
-      'Enregistrement des baux et suivi fiscal',
-      'Accompagnement achat et vente de terrains',
-      'Orientation et vérification des documents',
-      'Légalisation des documents immobiliers',
+      'Recherche active de terrains disponibles à l’achat ou à la vente',
+      'Mise en relation directe entre vendeurs et acheteurs de terrains',
+      'Vérification minutieuse des dossiers, titres et pièces foncières',
+      'Accompagnement administratif complet lors des transactions',
+      'Rédaction et relecture de baux d’habitation et baux commerciaux',
+      'Enregistrement fiscal des baux et suivi locatif sécurisé',
     ],
   },
   {
     id: 'entreprises',
-    label: "Création et formalités d'entreprises",
+    label: 'Création & formalités d’entreprises',
     icon: Building2,
     items: [
-      'Création de sociétés : SARL, entreprise individuelle',
-      "Préparation des dossiers pour l'ANPI",
-      'Immatriculation RCCM',
-      'Obtention du NIF',
-      'Modification des statuts',
-      'Préparation et dépôt des documents administratifs',
+      'Création et constitution de sociétés : SARL, SAS, entreprise individuelle',
+      'Préparation intégrale et dépôt des dossiers auprès de l’ANPI',
+      'Immatriculation au Registre du Commerce et du Crédit Mobilier (RCCM)',
+      'Obtention du Numéro d’Identification Fiscale (NIF)',
+      'Modification des statuts, cessions de parts et réorganisations',
+      'Formalités administratives et juridiques de lancement et de suivi',
+    ],
+  },
+  {
+    id: 'fiscalite-social',
+    label: 'Fiscalité, CNSS & CNAMGS',
+    icon: Receipt,
+    items: [
+      'Déclarations et formalités CNSS des employés sans stress',
+      'Démarches d’affiliation et de suivi auprès de la CNAMGS',
+      'Dossiers fiscaux préparés avec soin pour la DGI',
+      'Assistance dans les formalités auprès de l’administration fiscale',
+      'Veille fiscale et juridique pour anticiper vos obligations',
+      'Suivi régulier des échéances et archivage des justificatifs',
     ],
   },
   {
     id: 'contrats',
-    label: 'Contrats et documents juridiques',
+    label: 'Contrats, baux & actes juridiques',
     icon: FileSignature,
     items: [
-      'Contrats de prestation de services',
-      'Reconnaissances de dette',
-      'Procurations',
-      'Relecture de contrats avant signature',
-      'Rédaction de courriers et actes juridiques',
+      'Rédaction de contrats de prestation de services et contrats commerciaux',
+      'Préparation et sécurisation de baux d’habitation et professionnels',
+      'Rédaction de procès-verbaux (assemblées générales, réunions de direction)',
+      'Reconnaissances de dettes, accords bilatéraux et conventions',
+      'Rédaction de procurations officielles et mandats',
+      'Lecture et analyse juridique de contrats avant signature',
+    ],
+  },
+  {
+    id: 'achats-sourcing',
+    label: 'Achats, sourcing & intermédiation',
+    icon: Handshake,
+    items: [
+      'Recherche ciblée de produits, équipements et matériels',
+      'Sourcing, identification et qualification de fournisseurs fiables',
+      'Comparaison approfondie des offres de prix et conditions commerciales',
+      'Mise en relation d’affaires entre entreprises, fournisseurs et clients',
+      'Assistance à la passation de commande et suivi d’acheminement',
+      'Accompagnement à la vente de biens, produits ou équipements',
     ],
   },
   {
     id: 'particuliers',
-    label: 'Services pour particuliers',
-    icon: UserRound,
+    label: 'Particuliers & démarches judiciaires',
+    icon: Scale,
     items: [
-      "Dossiers d'état civil : naissance, mariage, décès, duplicata",
-      'Filiation : reconnaissance et lien parent-enfant',
-      'Déclarations et démarches administratives',
-      'Demandes, dépôt et suivi de dossiers',
-      'Obtention de casier judiciaire',
-      'Tous documents afférents au tribunal',
-    ],
-  },
-  {
-    id: 'entreprises-assistance',
-    label: 'Services pour entreprises',
-    icon: Briefcase,
-    items: [
-      'Constitution de dossiers administratifs',
-      'Assistance administrative pour petites entreprises',
-      'Assistance fiscale de base : orientation DGI, formulaires simples',
-      'Déclaration CNSS des employés',
-      'Déclaration CNAMGS des employés',
-      'Formalités sociales et administratives',
+      'Demande et obtention de casier judiciaire',
+      'Préparation de documents et dossiers liés aux démarches judiciaires',
+      'Dossiers d’état civil : naissance, mariage, décès, duplicatas',
+      'Dossiers de filiation : reconnaissance et lien parent-enfant',
+      'Rédaction de courriers administratifs, recours et requêtes',
+      'Accompagnement dans les formalités auprès du tribunal',
     ],
   },
   {
     id: 'bureau',
-    label: 'Services rapides et bureau',
+    label: 'Services rapides & assistance de bureau',
     icon: Printer,
     items: [
-      'Scan, impression, photocopie',
-      'Constitution et classement de dossiers',
-      'Suivi de dossiers auprès des administrations',
-      'Prise de rendez-vous',
-      'Traduction simple français vers anglais',
-      'Certification conforme de documents',
+      'Classement, archivage et organisation méthodique de documents',
+      'Préparation de dossiers administratifs prêts à l’emploi',
+      'Scan, impression, photocopie et reproduction de pièces',
+      'Prise de rendez-vous et suivi auprès des administrations',
+      'Traduction simple de documents et courriers français / anglais',
+      'Assistance de secrétariat juridique et administratif',
     ],
   },
 ] as const;
 
-/** Options du champ « objet » du formulaire, alignees sur les domaines ci-dessus. */
+/** Options du champ « objet » du formulaire, alignees sur les prestations et formules. */
 export const contactSubjects = [
   ...serviceDomains.map((domain) => ({ value: domain.id, label: domain.label })),
+  { value: 'abonnement-mensuel', label: 'Abonnement mensuel (L’esprit libre)' },
+  { value: 'offre-globale', label: 'Offre globale tout-inclus' },
   { value: 'autre', label: 'Autre demande' },
 ] as const;
